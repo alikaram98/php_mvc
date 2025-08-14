@@ -12,6 +12,8 @@ function realBool($value): bool
 }
 
 return [
+    'app_name' => $_ENV['APP_NAME'],
+    'app_version' => $_ENV['APP_VERSION'] ?? '1',
     'display_error'     => realBool($_ENV['APP_DEBUG']),
     'error_log'         => true,
     'error_log_details' => true,

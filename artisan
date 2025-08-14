@@ -1,0 +1,17 @@
+#!/usr/bin/env php 
+<?php
+
+use App\Core\Config;
+use Symfony\Component\Console\Application;
+
+$container = require __DIR__ . '/bootstrap.php';
+
+$config = $container->get(Config::class);
+
+$application = new Application($config->get('app_name'), $config->get('app_version'));
+
+$listCommands = require CONFIG_PATH . '/commands.php';
+
+$application->addCommands(array_map(fn($command) => $container->get($command), $listCommands));
+
+$application->run();
