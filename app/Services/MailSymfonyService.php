@@ -6,10 +6,12 @@ namespace App\Services;
 
 use App\Core\Config;
 use App\DataObjects\MailerConfigFormatter;
-use Symfony\Component\Mailer\Transport\TransportInterface;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\{
+    Transport\TransportInterface,
+    Envelope,
+    MailerInterface,
+    Transport,
+};
 use Symfony\Component\Mime\RawMessage;
 
 class MailSymfonyService implements MailerInterface

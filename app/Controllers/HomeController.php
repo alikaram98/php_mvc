@@ -21,6 +21,13 @@ class HomeController
 
     public function index(Request $request, Response $response): Response
     {
+        $response->getBody()->write('message for testing');
+
+        return $response;
+    }
+
+    public function sendEmail(Request $request, Response $response): Response
+    {
         try {
             $message = new Email()
                 ->from($this->config->get('mailer.from_user'))
