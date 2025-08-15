@@ -7,6 +7,4 @@ use Slim\App;
 
 return function (App $app) {
     $app->get('/', [HomeController::class, 'index']);
-
-    $app->get('/user', [HomeController::class, 'userLists']);
 };

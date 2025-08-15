@@ -25,7 +25,6 @@ class DB
                 $dbConfig['password'],
                 $dbConfig['options']
             );
-            echo "Database connected" . "<br/>";
         } catch (\PDOException $e) {
             exit($e->getMessage());
         }

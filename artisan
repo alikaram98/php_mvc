@@ -1,6 +1,7 @@
 #!/usr/bin/env php 
 <?php
 
+use App\Console\MyCustomCommand;
 use App\Core\Config;
 use Symfony\Component\Console\Application;
 
@@ -15,3 +16,4 @@ $listCommands = require CONFIG_PATH . '/commands.php';
 $application->addCommands(array_map(fn($command) => $container->get($command), $listCommands));
 
 $application->run();
+
