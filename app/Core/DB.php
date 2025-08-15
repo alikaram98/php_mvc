@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Core;
+
+use PDO;
+
+/**
+ * @mixin PDO
+ */
+class DB
+{
+    private PDO $pdo;
+
+    public function __construct(
+        private readonly Config $config
+    ) {
+        try {
+            $dbConfig = $config->get('connection.pdo');
+
+            $this->pdo = new PDO(
+                "{$dbConfig['driver']}:host={$dbConfig['host']};dbname={$dbConfig['dbname']};charset={$dbConfig['charset']}",
+                $dbConfig['user'],
+                $dbConfig['password'],
+                $dbConfig['options']
+            );
+            echo "Database connected" . "<br/>";
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function __call(string $method, array $args): mixed
+    {
+        return call_user_func_array([$this->pdo, $method], $args);
+    }
+}

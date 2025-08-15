@@ -12,8 +12,8 @@ function realBool($value): bool
 }
 
 return [
-    'app_name' => $_ENV['APP_NAME'],
-    'app_version' => $_ENV['APP_VERSION'] ?? '1',
+    'app_name'          => $_ENV['APP_NAME'],
+    'app_version'       => $_ENV['APP_VERSION'] ?? '1',
     'display_error'     => realBool($_ENV['APP_DEBUG']),
     'error_log'         => true,
     'error_log_details' => true,
@@ -24,6 +24,21 @@ return [
         'port'       => $_ENV['MAIL_PORT'],
         'host'       => $_ENV['MAIL_HOST'],
         'encryption' => $_ENV['MAIL_ENCRIPTION'],
-        'from_user' => $_ENV['MAIL_FROM_USER']
-    ]
+        'from_user'  => $_ENV['MAIL_FROM_USER']
+    ],
+    'connection'        => [
+        'pdo' => [
+            'driver'   => $_ENV['DB_DRIVER'] ?? 'mysql',
+            'dbname'   => $_ENV['DB_DATABASE'],
+            'host'     => $_ENV['DB_HOST'],
+            'user'     => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'charset' => $_ENV['DB_charset'] ?? 'utf8',
+            'options'  => [
+                \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
+                \PDO::ATTR_EMULATE_PREPARES   => false
+            ]
+        ]
+    ],
 ];

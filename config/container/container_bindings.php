@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\Config;
+use App\Core\DB;
 use App\Services\MailSymfonyService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
