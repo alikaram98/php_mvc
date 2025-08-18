@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>welcome</title>
+    <title><?= $title ?></title>
+    <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
-    <!-- TODO $router->urlFor('register') -->
-    <a href="#">login</a>
-    <a href="#">register</a>
-   <h1>welcome page</h1> 
+   <?= $content ?> 
 </body>
 </html>

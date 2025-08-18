@@ -23,9 +23,7 @@ class HomeController
 
     public function index(Request $request, Response $response): Response
     {
-        $response->getBody()->write('message for testing');
-
-        return $response;
+        return $this->phpRenderer->render($response, 'welcome.php');
     }
 
     public function sendEmail(Request $request, Response $response): Response
