@@ -22,7 +22,14 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } catch (ValidationException $e) {
+            $data               = $request->getParsedBody();
+
+            $filterFields = ['password', 'confirm_password'];
+
+            $data = array_diff_key($data, array_flip($filterFields));
+
             $_SESSION['errors'] = $e->errors;
+            $_SESSION['old'] = $data;
 
             $response = $this->responseFactory->createResponse();
 
