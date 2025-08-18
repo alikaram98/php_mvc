@@ -4,7 +4,6 @@
             <h2>Welcome Back</h2>
             <p>Sign up to your account</p>
         </div>
-
         <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('register') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
