@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\Config;
+use App\Middlewares\RouteNameMiddleware;
 use App\Middlewares\StartSessionMiddleware;
 use App\Middlewares\ValidationExceptionMiddleware;
 use Slim\App;
@@ -12,6 +13,7 @@ return function (App $app): void {
 
     $config = $container->get(Config::class);
 
+    $app->add(RouteNameMiddleware::class);
     $app->add(ValidationExceptionMiddleware::class);
     $app->add(StartSessionMiddleware::class);
 

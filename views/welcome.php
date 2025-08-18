@@ -6,9 +6,8 @@
     <title>welcome</title>
 </head>
 <body>
-    <!-- TODO $router->urlFor('register') -->
-    <a href="#">login</a>
-    <a href="#">register</a>
+    <a href="<?= $router->urlFor('login') ?>">login</a>
+    <a href="<?= $router->urlFor('register') ?>">register</a>
    <h1>welcome page</h1> 
 </body>
 </html>

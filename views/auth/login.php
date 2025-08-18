@@ -5,7 +5,7 @@
             <p>Sign in to your account</p>
         </div>
 
-        <form class="login-form" id="loginForm" novalidate>
+        <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('login') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="email" id="email" name="email" required autocomplete="email">
@@ -60,7 +60,7 @@
         </div>
 
         <div class="signup-link">
-            <p>Don't have an account? <a href="/register">Sign up</a></p>
+            <p>Don't have an account? <a href="<?= $router->urlFor('register') ?>">Sign up</a></p>
         </div>
 
         <div class="success-message" id="successMessage">
