@@ -15,7 +15,9 @@ abstract class Repository
 
     abstract public function model(): string;
 
-    public function __construct(private ContainerInterface $container) {
+    public function __construct(
+        private ContainerInterface $container
+    ) {
         $this->model = $container->get($this->model());
 
         $this->table = $this->model->getTable();
@@ -24,9 +26,32 @@ abstract class Repository
     /**
      * Global methods
      */
-    public function all() {
+    public function all()
+    {
         $stmt = $this->model->db->query("SELECT * FROM {$this->table}");
 
         return $stmt->fetchAll();
+    }
+
+    public function exists($field, $value): bool
+    {
+        $query = "SELECT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
+
+        $stmt = $this->model->db->prepare($query);
+
+        $stmt->execute([$field => $value]);
+
+        return !!$stmt->fetchColumn();
+    }
+
+    public function doesntExist($field, $value): bool
+    {
+         $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
+
+        $stmt = $this->model->db->prepare($query);
+
+        $stmt->execute([$field => $value]);
+
+        return !!$stmt->fetchColumn();
     }
 }

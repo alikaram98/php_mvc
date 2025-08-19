@@ -16,7 +16,7 @@ return function (App $app): void {
         $auth->get('/login', [LoginUserController::class, 'login'])->setName('login');
         $auth->get('/register', [RegisterUserController::class, 'register'])->setName('register');
 
-        $auth->post('/login', [LoginUserController::class, 'loginUser'])->setName('login');
-        $auth->post('/register', [RegisterUserController::class, 'storeUser'])->setName('register');
+        $auth->post('/login', [LoginUserController::class, 'loginUser'])->setName('login.user');
+        $auth->post('/register', [RegisterUserController::class, 'storeUser'])->setName('register.store');
     })->add(GuestMiddleware::class);
 };

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\RouteNameInterface;
 use App\Core\Config;
 use App\Core\DB;
+use App\Core\RequestFactory;
 use App\Services\MailSymfonyService;
 use App\Services\RouteNamePhpRendererService;
 use Psr\Container\ContainerInterface;
@@ -31,9 +33,10 @@ return [
 
         return $app;
     },
-    PhpRenderer::class              => create(PhpRenderer::class)->constructor(VIEW_PATH),
-    Config::class                   => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
-    MailerInterface::class          => fn(Config $config): MailSymfonyService => new MailSymfonyService($config),
-    ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
-    RouteNameInterface::class       => fn(ContainerInterface $container) => $container->get(RouteNamePhpRendererService::class),
+    PhpRenderer::class                      => create(PhpRenderer::class)->constructor(VIEW_PATH),
+    Config::class                           => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
+    MailerInterface::class                  => fn(Config $config): MailSymfonyService => new MailSymfonyService($config),
+    ResponseFactoryInterface::class         => fn(App $app) => $app->getResponseFactory(),
+    RouteNameInterface::class               => fn(ContainerInterface $container) => $container->get(RouteNamePhpRendererService::class),
+    RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(RequestFactory::class),
 ];

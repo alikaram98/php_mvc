@@ -4,14 +4,14 @@
             <h2>Welcome Back</h2>
             <p>Sign up to your account</p>
         </div>
-        <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('register') ?>">
+        <form class="login-form" id="registerForm" method="post" action="<?= $router->urlFor('register.store') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="name" id="name" name="name" required autocomplete="name">
                     <label for="name">Name</label>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="emailError"></span>
+                <?= @showError($errors['name']) ?>
             </div>
 
             <div class="form-group">
@@ -20,7 +20,7 @@
                     <label for="email">Email Address</label>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="emailError"></span>
+                <?= @showError($errors['email']) ?>
             </div>
 
             <div class="form-group">
@@ -32,7 +32,7 @@
                     </button>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="passwordError"></span>
+                <?= @showError($errors['password']) ?>
             </div>
             
             <div class="form-group">
@@ -45,17 +45,6 @@
                     <span class="focus-border"></span>
                 </div>
                 <span class="error-message" id="passwordError"></span>
-            </div>
-
-            <div class="form-options">
-                <label class="remember-wrapper">
-                    <input type="checkbox" id="remember" name="remember">
-                    <span class="checkbox-label">
-                        <span class="checkmark"></span>
-                        Remember me
-                    </span>
-                </label>
-                <a href="#" class="forgot-password">Forgot password?</a>
             </div>
 
             <button type="submit" class="login-btn btn">

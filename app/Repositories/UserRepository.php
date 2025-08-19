@@ -12,15 +12,4 @@ class UserRepository extends Repository
     {
         return User::class;
     }
-
-    // Custom method
-    public function find(int $id) {
-        $query = "SELECT * FROM {$this->table} WHERE id=:id";
-
-        $stmt = $this->model->db->prepare($query);
-
-        $stmt->execute(['id' => $id]);
-
-        return $stmt->fetch();
-    }
 }

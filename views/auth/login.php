@@ -5,7 +5,7 @@
             <p>Sign in to your account</p>
         </div>
 
-        <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('login') ?>">
+        <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('login.user') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="email" id="email" name="email" required autocomplete="email">
@@ -27,7 +27,7 @@
                 <span class="error-message" id="passwordError"></span>
             </div>
 
-            <div class="form-options">
+            <!-- <div class="form-options">
                 <label class="remember-wrapper">
                     <input type="checkbox" id="remember" name="remember">
                     <span class="checkbox-label">
@@ -36,11 +36,11 @@
                     </span>
                 </label>
                 <a href="#" class="forgot-password">Forgot password?</a>
-            </div>
+            </div> -->
 
             <button type="submit" class="login-btn btn">
                 <span class="btn-text">Sign In</span>
-                <span class="btn-loader"></span>
+                <!-- <span class="btn-loader"></span> -->
             </button>
         </form>
 
