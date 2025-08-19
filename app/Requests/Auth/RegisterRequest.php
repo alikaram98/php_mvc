@@ -24,7 +24,7 @@ class RegisterRequest implements RequestValidatorInterface
         $v->rule('email', 'email');
         $v->rule(function ($field, $value, $params, $fields) {
             return $this->userRepository->doesntExist($field, $value);
-        }, 'email')->message('{field} failed...');
+        }, 'email')->message('{field} has been created already...');
         $v->rules([
             'lengthMin' => [
                 ['name', 3],
@@ -39,6 +39,8 @@ class RegisterRequest implements RequestValidatorInterface
         }
 
         $data = array_diff_key($data, array_flip(['confirm_password']));
+
+        $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 
         return $data;
     }

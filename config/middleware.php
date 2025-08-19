@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Core\Config;
+use App\Middlewares\OldFormDataMiddleware;
 use App\Middlewares\RouteNameMiddleware;
 use App\Middlewares\StartSessionMiddleware;
 use App\Middlewares\ValidationErrorMiddleware;
@@ -14,6 +15,7 @@ return function (App $app): void {
 
     $config = $container->get(Config::class);
 
+    $app->add(OldFormDataMiddleware::class);
     $app->add(RouteNameMiddleware::class);
     $app->add(ValidationErrorMiddleware::class);
     $app->add(ValidationExceptionMiddleware::class);

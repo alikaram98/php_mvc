@@ -34,28 +34,22 @@ class RegisterUserController
         );
     }
 
-    public function storeUser(Request $request, Response $response): ?Response
+    public function storeUser(Request $request, Response $response): Response
     {
-        try {
-            $data = $this
-                ->requestFactory
-                ->make(RegisterRequest::class)
-                ->verify($request->getParsedBody());
+        $data = $this
+            ->requestFactory
+            ->make(RegisterRequest::class)
+            ->verify($request->getParsedBody());
 
-            $user = $this->userRepository->storeGetUser($data);
+        $user = $this->userRepository->storeGetUser($data);
 
-            session_regenerate_id();
+        session_regenerate_id();
 
-            $_SESSION['user'] = $user;
+        $_SESSION['user'] = $user;
 
-            return $response->withHeader(
-                'Location',
-                $this->router->routeName()->urlFor('dashboard')
-            )->withStatus(302);
-        } catch (\Throwable $th) {
-            $this->log->error($th->getMessage());
-        }
-
-        return null;
+        return $response->withHeader(
+            'Location',
+            $this->router->routeName()->urlFor('dashboard')
+        )->withStatus(302);
     }
 }

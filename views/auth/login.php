@@ -8,11 +8,11 @@
         <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('login.user') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
-                    <input type="email" id="email" name="email" required autocomplete="email">
+                    <input type="email" value="<?= @$old['email'] ?>" id="email" name="email" required autocomplete="email">
                     <label for="email">Email Address</label>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="emailError"></span>
+                <?= @showError($errors['email']) ?>
             </div>
 
             <div class="form-group">
@@ -24,7 +24,7 @@
                     </button>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="passwordError"></span>
+                <?= @showError($errors['password']) ?>
             </div>
 
             <!-- <div class="form-options">

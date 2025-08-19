@@ -85,6 +85,26 @@ abstract class Repository
         } catch (\PDOException $e) {
             $this->log->error($e->getMessage());
         }
+        return null;
+    }
+
+    public function findByColumn($field, $value, array|string $columns = '*'): mixed
+    {
+        try {
+            if (is_array($columns)) {
+                $columns = implode(',', $columns);
+            }
+
+            $stmt = $this->model->db->prepare("SELECT {$columns} FROM {$this->table} WHERE $field=:$field");
+            $stmt->bindParam($field, $value);
+
+            $stmt->execute();
+
+            return $stmt->fetch();
+        } catch (\PDOException $e) {
+            $this->log->error($e->getMessage());
+
             return null;
+        }
     }
 }
