@@ -28,31 +28,43 @@ abstract class Repository
      */
     public function all()
     {
-        $stmt = $this->model->db->query("SELECT * FROM {$this->table}");
+        try {
+            $stmt = $this->model->db->query("SELECT * FROM {$this->table}");
 
-        return $stmt->fetchAll();
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 
     public function exists($field, $value): bool
     {
-        $query = "SELECT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
+        try {
+            $query = "SELECT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
 
-        $stmt = $this->model->db->prepare($query);
+            $stmt = $this->model->db->prepare($query);
 
-        $stmt->execute([$field => $value]);
+            $stmt->execute([$field => $value]);
 
-        return !!$stmt->fetchColumn();
+            return !!$stmt->fetchColumn();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 
     public function doesntExist($field, $value): bool
     {
-        $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
+        try {
+            $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
 
-        $stmt = $this->model->db->prepare($query);
+            $stmt = $this->model->db->prepare($query);
 
-        $stmt->execute([$field => $value]);
+            $stmt->execute([$field => $value]);
 
-        return !!$stmt->fetchColumn();
+            return !!$stmt->fetchColumn();
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 
     public function store(array $data)

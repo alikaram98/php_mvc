@@ -45,8 +45,6 @@ class RegisterUserController
 
         $_SESSION['user'] = $user;
 
-        echo $this->router->routeName()->urlFor('dashboard');
-
         return $response->withHeader(
             'Location',
             $this->router->routeName()->urlFor('dashboard')
