@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Contracts\LogInterface;
+use App\Services\Log;
 use PDO;
+use Psr\Log\LoggerInterface;
 
 /**
  * @mixin PDO
@@ -14,7 +17,8 @@ class DB
     private PDO $pdo;
 
     public function __construct(
-        private readonly Config $config
+        private readonly Config $config,
+        private readonly LoggerInterface $log
     ) {
         try {
             $dbConfig = $config->get('connection.pdo');
@@ -26,7 +30,7 @@ class DB
                 $dbConfig['options']
             );
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
         }
     }
 

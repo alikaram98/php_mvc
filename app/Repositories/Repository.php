@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Contracts\ModelInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class Repository
 {
@@ -16,7 +17,8 @@ abstract class Repository
     abstract public function model(): string;
 
     public function __construct(
-        private ContainerInterface $container
+        private ContainerInterface $container,
+        public readonly LoggerInterface $log
     ) {
         $this->model = $container->get($this->model());
 
@@ -26,18 +28,19 @@ abstract class Repository
     /**
      * Global methods
      */
-    public function all()
+    public function all(): ?array
     {
         try {
             $stmt = $this->model->db->query("SELECT * FROM {$this->table}");
 
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
+            return null;
         }
     }
 
-    public function exists($field, $value): bool
+    public function exists($field, $value): ?bool
     {
         try {
             $query = "SELECT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
@@ -48,11 +51,12 @@ abstract class Repository
 
             return !!$stmt->fetchColumn();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
         }
+        return null;
     }
 
-    public function doesntExist($field, $value): bool
+    public function doesntExist($field, $value): ?bool
     {
         try {
             $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
@@ -63,11 +67,12 @@ abstract class Repository
 
             return !!$stmt->fetchColumn();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
         }
+        return null;
     }
 
-    public function store(array $data)
+    public function store(array $data): ?bool
     {
         try {
             $fields = array_keys($data);
@@ -78,7 +83,8 @@ abstract class Repository
 
             return $stmt->execute($data);
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
         }
+            return null;
     }
 }

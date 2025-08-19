@@ -10,6 +10,7 @@ use App\Repositories\UserRepository;
 use App\Requests\Auth\RegisterRequest;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Slim\Views\PhpRenderer;
 
 class RegisterUserController
@@ -18,7 +19,8 @@ class RegisterUserController
         private readonly PhpRenderer $renderer,
         private readonly UserRepository $userRepository,
         private readonly RequestValidatorFactoryInterface $requestFactory,
-        private readonly RouteNameInterface $router
+        private readonly RouteNameInterface $router,
+        private readonly LoggerInterface $log
     ) {}
 
     public function register(Request $requet, Response $response): Response
@@ -32,22 +34,28 @@ class RegisterUserController
         );
     }
 
-    public function storeUser(Request $request, Response $response): Response
+    public function storeUser(Request $request, Response $response): ?Response
     {
-        $data = $this
-            ->requestFactory
-            ->make(RegisterRequest::class)
-            ->verify($request->getParsedBody());
+        try {
+            $data = $this
+                ->requestFactory
+                ->make(RegisterRequest::class)
+                ->verify($request->getParsedBody());
 
-        $user = $this->userRepository->storeGetUser($data);
+            $user = $this->userRepository->storeGetUser($data);
 
-        session_regenerate_id();
+            session_regenerate_id();
 
-        $_SESSION['user'] = $user;
+            $_SESSION['user'] = $user;
 
-        return $response->withHeader(
-            'Location',
-            $this->router->routeName()->urlFor('dashboard')
-        )->withStatus(302);
+            return $response->withHeader(
+                'Location',
+                $this->router->routeName()->urlFor('dashboard')
+            )->withStatus(302);
+        } catch (\Throwable $th) {
+            $this->log->error($th->getMessage());
+        }
+
+        return null;
     }
 }

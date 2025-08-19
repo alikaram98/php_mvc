@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Slim\Views\PhpRenderer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,6 +20,7 @@ class HomeController
         private readonly PhpRenderer $phpRenderer,
         private readonly MailerInterface $mailer,
         private readonly Config $config,
+        private readonly LoggerInterface $log
     ) {}
 
     public function index(Request $request, Response $response): Response
@@ -26,7 +28,7 @@ class HomeController
         return $this->phpRenderer->render($response, 'welcome.php');
     }
 
-    public function sendEmail(Request $request, Response $response): Response
+    public function sendEmail(Request $request, Response $response): ?Response
     {
         try {
             $message = new Email()
@@ -39,7 +41,8 @@ class HomeController
 
             return $this->phpRenderer->render($response, 'welcome.php');
         } catch (\Throwable $th) {
-            exit($th->getMessage());
+            $this->log->error('Error when send mail ' . $th->getMessage());
         }
+        return null;
     }
 }

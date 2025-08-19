@@ -14,6 +14,7 @@ function realBool($value): bool
 return [
     'app_name'          => $_ENV['APP_NAME'],
     'app_version'       => $_ENV['APP_VERSION'] ?? '1',
+    'log_directory'     => STORAGE_PATH . 'mvc/mvc.log',
     'display_error'     => realBool($_ENV['APP_DEBUG']),
     'error_log'         => true,
     'error_log_details' => true,
@@ -33,7 +34,7 @@ return [
             'host'     => $_ENV['DB_HOST'],
             'user'     => $_ENV['DB_USERNAME'],
             'password' => $_ENV['DB_PASSWORD'],
-            'charset' => $_ENV['DB_charset'] ?? 'utf8',
+            'charset'  => $_ENV['DB_charset'] ?? 'utf8',
             'options'  => [
                 \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,

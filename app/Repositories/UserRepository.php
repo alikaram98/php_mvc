@@ -12,8 +12,8 @@ class UserRepository extends Repository
     {
         return User::class;
     }
-    
-    public function storeGetUser(array $data)
+
+    public function storeGetUser(array $data): mixed
     {
         try {
             $fields = array_keys($data);
@@ -32,7 +32,9 @@ class UserRepository extends Repository
 
             return $stmt->fetch();
         } catch (\PDOException $e) {
-            exit($e->getMessage());
+            $this->log->error($e->getMessage());
         }
+
+        return null;
     }
 }
