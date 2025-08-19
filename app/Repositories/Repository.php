@@ -46,12 +46,27 @@ abstract class Repository
 
     public function doesntExist($field, $value): bool
     {
-         $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
+        $query = "SELECT NOT EXISTS(SELECT 1 FROM {$this->table} WHERE $field=:$field)";
 
         $stmt = $this->model->db->prepare($query);
 
         $stmt->execute([$field => $value]);
 
         return !!$stmt->fetchColumn();
+    }
+
+    public function store(array $data)
+    {
+        try {
+            $fields = array_keys($data);
+            $keys   = implode(',', $fields);
+            $values = ':' . implode(',:', $fields);
+
+            $stmt = $this->model->db->prepare("INSERT INTO {$this->table}($keys) VALUES ($values)");
+
+            return $stmt->execute($data);
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 }

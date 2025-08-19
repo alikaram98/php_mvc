@@ -38,6 +38,8 @@ class RegisterRequest implements RequestValidatorInterface
             throw new ValidationException($v->errors());
         }
 
+        $data = array_diff_key($data, array_flip(['confirm_password']));
+
         return $data;
     }
 }
