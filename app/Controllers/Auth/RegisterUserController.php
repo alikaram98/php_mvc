@@ -7,6 +7,7 @@ namespace App\Controllers\Auth;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\RouteNameInterface;
 use App\Contracts\SessionInterface;
+use App\Enums\UserAuth;
 use App\Repositories\UserRepository;
 use App\Requests\Auth\RegisterRequest;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -47,7 +48,7 @@ class RegisterUserController
 
         $this->session->regenerate();
 
-        $this->session->put('user', $id);
+        $this->session->put(keyAuth(), $id);
 
         return $response->withHeader(
             'Location',

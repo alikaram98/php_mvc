@@ -6,6 +6,7 @@ namespace App\Core;
 
 use App\Contracts\AuthInterface;
 use App\Contracts\SessionInterface;
+use App\Enums\UserAuth;
 use App\Repositories\UserRepository;
 
 class Auth implements AuthInterface
@@ -23,8 +24,8 @@ class Auth implements AuthInterface
             return $this->user;
         }
 
-        $userId = $this->session->has('user')
-            ? $this->session->get('user')
+        $userId = $this->session->has(keyAuth())
+            ? $this->session->get(keyAuth())
             : null;
 
         if (!$userId) {
@@ -56,7 +57,7 @@ class Auth implements AuthInterface
 
         $this->session->regenerate();
 
-        $this->session->put('user', $user->id);
+        $this->session->put(keyAuth(), $user->id);
 
         return true;
     }
@@ -75,6 +76,6 @@ class Auth implements AuthInterface
     {
         $this->user = null;
 
-        $this->session->forget('user');
+        $this->session->forget(keyAuth());
     }
 }

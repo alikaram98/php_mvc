@@ -56,7 +56,7 @@ class SessionService implements SessionInterface
     public function clear(): void
     {
         foreach ($_SESSION as $key => $value) {
-            if ($key === 'user') {
+            if ($key === keyAuth()) {
                 continue;
             }
 
