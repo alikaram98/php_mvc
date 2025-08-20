@@ -11,8 +11,10 @@ function realBool($value): bool
     return true;
 }
 
+$appName = $_ENV['APP_NAME'] ?? 'php_mvc';
+
 return [
-    'app_name'          => $_ENV['APP_NAME'],
+    'app_name'          => $appName,
     'app_version'       => $_ENV['APP_VERSION'] ?? '1',
     'log_directory'     => STORAGE_PATH . 'mvc/mvc.log',
     'display_error'     => realBool($_ENV['APP_DEBUG']),
@@ -41,5 +43,11 @@ return [
                 \PDO::ATTR_EMULATE_PREPARES   => false
             ]
         ]
+    ],
+    'session'           => [
+        'name'     => $appName,
+        'sameSite' => 'strict',
+        'httponly' => true,
+        'secure'   => true
     ],
 ];

@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\SessionInterface;
+use App\DataObjects\SessionConfig;
 use App\Exceptions\SessionException;
 
 class SessionService implements SessionInterface
 {
+    public function __construct(
+        private readonly SessionConfig $options
+    ) {}
+
     public function start(): void
     {
         if ($this->isActive()) {
@@ -19,10 +24,12 @@ class SessionService implements SessionInterface
             throw new SessionException('Header send in ' . $fileName . ' line' . $line . ' before start session');
         }
 
+        session_name($this->options->name);
+
         session_set_cookie_params([
-            'secure'   => true,
-            'httponly' => true,
-            'samesite' => true
+            'secure'   => $this->options->secure,
+            'httponly' => $this->options->httponly,
+            'samesite' => $this->options->sameSite->value
         ]);
 
         session_start();
@@ -74,7 +81,7 @@ class SessionService implements SessionInterface
         return session_status() === PHP_SESSION_ACTIVE;
     }
 
-    public function regenerate():void
+    public function regenerate(): void
     {
         session_regenerate_id();
     }

@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-use App\Contracts\AuthInterface;
-use App\Contracts\LogInterface;
-use App\Contracts\RequestValidatorFactoryInterface;
-use App\Contracts\RouteNameInterface;
-use App\Contracts\SessionInterface;
-use App\Core\Auth;
-use App\Core\Config;
-use App\Core\DB;
-use App\Core\RequestFactory;
+use App\Contracts\{
+    AuthInterface,
+    RequestValidatorFactoryInterface,
+    RouteNameInterface,
+    SessionInterface,
+};
+use App\Core\{
+    Auth,
+    Config,
+    RequestFactory,
+};
+use App\DataObjects\SessionConfig;
+use App\Enums\SameSite;
 use App\Services\MailSymfonyService;
-use App\Services\MonoLogService;
 use App\Services\RouteNamePhpRendererService;
 use App\Services\SessionService;
 use Monolog\Handler\StreamHandler;
@@ -50,7 +53,14 @@ return [
     RouteNameInterface::class               => fn(ContainerInterface $container) => $container->get(RouteNamePhpRendererService::class),
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(RequestFactory::class),
     AuthInterface::class                    => fn(ContainerInterface $container) => $container->get(Auth::class),
-    SessionInterface::class                 => create(SessionService::class),
+    SessionInterface::class                 => fn(Config $config) => new SessionService(
+        new SessionConfig(
+            $config->get('session.name'),
+            $config->get('session.httponly'),
+            $config->get('session.secure'),
+            SameSite::tryFrom($config->get('session.sameSite'))
+        )
+    ),
     LoggerInterface::class                  => fn(Config $config): Logger
         => new Logger($config->get('app_name'))->pushHandler(
             new StreamHandler($config->get('log_directory'), Level::Warning)
