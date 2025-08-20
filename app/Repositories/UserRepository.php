@@ -13,7 +13,7 @@ class UserRepository extends Repository
         return User::class;
     }
 
-    public function storeGetUser(array $data): mixed
+    public function storeGetUser(array $data): ?int
     {
         try {
             $fields = array_keys($data);
@@ -23,14 +23,7 @@ class UserRepository extends Repository
             $stmt = $this->model->db->prepare("INSERT INTO {$this->table}($keys) VALUES ($values)");
             $stmt->execute($data);
 
-            $id = $this->model->db->lastInsertId();
-
-            $stmt = $this->model->db->prepare("SELECT * FROM {$this->table} WHERE id=:id");
-
-            $stmt->bindValue(':id', $id);
-            $stmt->execute();
-
-            return $stmt->fetch();
+            return (int) $this->model->db->lastInsertId();
         } catch (\PDOException $e) {
             $this->log->error($e->getMessage());
         }

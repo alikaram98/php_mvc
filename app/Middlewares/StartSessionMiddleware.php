@@ -22,6 +22,12 @@ class StartSessionMiddleware implements MiddlewareInterface
             throw new SessionException('Header send in ' . $fileName . ' line' . $line . ' before start session');
         }
 
+        session_set_cookie_params([
+            'secure'   => true,
+            'httponly' => true,
+            'samesite' => true
+        ]);
+
         session_start();
 
         $response = $handler->handle($request);

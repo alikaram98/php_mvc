@@ -41,11 +41,11 @@ class RegisterUserController
             ->make(RegisterRequest::class)
             ->verify($request->getParsedBody());
 
-        $user = $this->userRepository->storeGetUser($data);
+        $id = $this->userRepository->storeGetUser($data);
 
         session_regenerate_id();
 
-        $_SESSION['user'] = $user;
+        $_SESSION['user'] = $id;
 
         return $response->withHeader(
             'Location',

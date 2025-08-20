@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Contracts\AuthInterface;
 use App\Contracts\LogInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\RouteNameInterface;
+use App\Core\Auth;
 use App\Core\Config;
 use App\Core\DB;
 use App\Core\RequestFactory;
@@ -45,16 +47,9 @@ return [
     ResponseFactoryInterface::class         => fn(App $app) => $app->getResponseFactory(),
     RouteNameInterface::class               => fn(ContainerInterface $container) => $container->get(RouteNamePhpRendererService::class),
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(RequestFactory::class),
-    LoggerInterface::class => function(Config $config): Logger  {
-        $log = new Logger($config->get('app_name'));
-        $log->pushHandler(new StreamHandler($config->get('log_directory'), Level::Warning));
-
-        return $log;
-    }
-    // LogInterface::class                     => function (Config $config): MonoLogService {
-    //     $log = new Logger($config->get('app_name'));
-    //     $log->pushHandler(new StreamHandler($config->get('log_directory'), Level::Warning));
-
-    //     return new MonoLogService($log);
-    // },
+    AuthInterface::class                    => fn(ContainerInterface $container) => $container->get(Auth::class),
+    LoggerInterface::class                  => fn(Config $config): Logger
+        => new Logger($config->get('app_name'))->pushHandler(
+            new StreamHandler($config->get('log_directory'), Level::Warning)
+        ),
 ];

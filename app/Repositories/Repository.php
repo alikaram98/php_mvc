@@ -88,7 +88,7 @@ abstract class Repository
         return null;
     }
 
-    public function findByColumn($field, $value, array|string $columns = '*'): mixed
+    public function findByColumn($value, $field = 'id', array|string $columns = '*'): mixed
     {
         try {
             if (is_array($columns)) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers\Auth;
 
+use App\Contracts\AuthInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\RouteNameInterface;
 use App\Exceptions\ValidationException;
@@ -22,6 +23,7 @@ class LoginUserController
         private readonly RequestValidatorFactoryInterface $requestFactory,
         private readonly UserRepository $userRepository,
         private readonly RouteNameInterface $router,
+        private readonly AuthInterface $auth,
     ) {}
 
     public function login(Request $requet, Response $response): Response
@@ -35,15 +37,9 @@ class LoginUserController
     {
         $data = $this->requestFactory->make(LoginRequest::class)->verify($request->getParsedBody());
 
-        $user = $this->userRepository->findByColumn('email', $data['email']);
-
-        if (! password_verify($data['password'], $user->password)) {
-            throw new ValidationException(['password' => ['Password is in valid']]);
+        if (!$this->auth->attemptLogin($data)) {
+            throw new ValidationException(['password' => ['Email or Password is incorrect']]);
         }
-
-        session_regenerate_id();
-
-        $_SESSION['user'] = $user;
 
         return $response->withHeader(
             'Location',

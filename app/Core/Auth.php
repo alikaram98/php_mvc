@@ -1,0 +1,76 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Core;
+
+use App\Contracts\AuthInterface;
+use App\Repositories\UserRepository;
+
+class Auth implements AuthInterface
+{
+    private $user;
+
+    public function __construct(
+        private readonly UserRepository $userRepository
+    ) {}
+
+    public function user(): mixed
+    {
+        if ($this->user !== null) {
+            return $this->user;
+        }
+
+        $userId = $_SESSION['user'] ?? null;
+
+        if (!$userId) {
+            return null;
+        }
+
+        $user = $this->userRepository->findByColumn($userId);
+
+        if (!$user) {
+            return null;
+        }
+
+        $this->user = $user;
+
+        return $user;
+    }
+
+    public function attemptLogin(array $data): bool
+    {
+        $user = $this->userRepository->findByColumn($data['email'], 'email');
+
+        if (!$user) {
+            return false;
+        }
+
+        if (!password_verify($data['password'], $user->password)) {
+            return false;
+        }
+
+        session_regenerate_id();
+
+        $_SESSION['user'] = $user->id;
+
+        return true;
+    }
+
+    public function check(): bool
+    {
+        return $this->user() ? true : false;
+    }
+
+    public function guest(): bool
+    {
+        return $this->user() ? false : true;
+    }
+
+    public function logout(): void
+    {
+        $this->user = null;
+
+        unset($_SESSION['user']);
+    }
+}

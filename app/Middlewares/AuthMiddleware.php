@@ -4,23 +4,28 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
+use App\Contracts\AuthInterface;
 use App\Contracts\RouteNameInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Slim\Views\PhpRenderer;
 
 class AuthMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
-        private readonly RouteNameInterface $route
+        private readonly RouteNameInterface $route,
+        private readonly AuthInterface $auth,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!empty($_SESSION['user'])) {
+        if ($user = $this->auth->user()) {
+            $request = $request->withAttribute('user', $user);
+
             return $handler->handle($request);
         }
 
@@ -30,6 +35,6 @@ class AuthMiddleware implements MiddlewareInterface
             ->withHeader(
                 'Location',
                 $this->route->routeName()->urlFor('home')
-             );
+            );
     }
 }

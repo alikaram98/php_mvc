@@ -13,10 +13,8 @@ class LoginRequest implements RequestValidatorInterface
 {
     public function __construct(
         private readonly UserRepository $userRepository
-    )
-    {
-        
-    }
+    ) {}
+
     public function verify(array $data): array
     {
         $v = new Validator($data);
