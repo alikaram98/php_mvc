@@ -6,6 +6,7 @@ namespace App\Controllers\Auth;
 
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\RouteNameInterface;
+use App\Contracts\SessionInterface;
 use App\Repositories\UserRepository;
 use App\Requests\Auth\RegisterRequest;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -20,7 +21,8 @@ class RegisterUserController
         private readonly UserRepository $userRepository,
         private readonly RequestValidatorFactoryInterface $requestFactory,
         private readonly RouteNameInterface $router,
-        private readonly LoggerInterface $log
+        private readonly LoggerInterface $log,
+        private readonly SessionInterface $session,
     ) {}
 
     public function register(Request $requet, Response $response): Response
@@ -43,9 +45,9 @@ class RegisterUserController
 
         $id = $this->userRepository->storeGetUser($data);
 
-        session_regenerate_id();
+        $this->session->regenerate();
 
-        $_SESSION['user'] = $id;
+        $this->session->put('user', $id);
 
         return $response->withHeader(
             'Location',

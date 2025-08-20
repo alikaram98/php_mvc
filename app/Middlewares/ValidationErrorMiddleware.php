@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
+use App\Contracts\SessionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -13,17 +14,17 @@ use Slim\Views\PhpRenderer;
 class ValidationErrorMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        private readonly PhpRenderer $rendere
+        private readonly PhpRenderer $rendere,
+        private readonly SessionInterface $session
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (!empty($_SESSION['errors'])) {
-            $this->rendere->addAttribute('errors', $_SESSION['errors']);
-
-            unset($_SESSION['errors']);
+        if ($this->session->has('errors')) {
+            $this->rendere->addAttribute('errors', $this->session->get('errors'));
+            $this->session->forget('errors');
         }
 
-        return $handler->handle($request); 
+        return $handler->handle($request);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Contracts\AuthInterface;
+use App\Contracts\SessionInterface;
 use App\Repositories\UserRepository;
 
 class Auth implements AuthInterface
@@ -12,7 +13,8 @@ class Auth implements AuthInterface
     private $user;
 
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly SessionInterface $session
     ) {}
 
     public function user(): mixed
@@ -21,7 +23,9 @@ class Auth implements AuthInterface
             return $this->user;
         }
 
-        $userId = $_SESSION['user'] ?? null;
+        $userId = $this->session->has('user')
+            ? $this->session->get('user')
+            : null;
 
         if (!$userId) {
             return null;
@@ -50,9 +54,9 @@ class Auth implements AuthInterface
             return false;
         }
 
-        session_regenerate_id();
+        $this->session->regenerate();
 
-        $_SESSION['user'] = $user->id;
+        $this->session->put('user', $user->id);
 
         return true;
     }
@@ -71,6 +75,6 @@ class Auth implements AuthInterface
     {
         $this->user = null;
 
-        unset($_SESSION['user']);
+        $this->session->forget('user');
     }
 }
