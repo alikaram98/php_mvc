@@ -16,3 +16,5 @@
 [2025-08-21T16:13:57.358982+00:00] php_mvc.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'csrf_name' in 'INSERT INTO' [] []
 [2025-08-21T16:15:31.864204+00:00] php_mvc.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'csrf_name' in 'INSERT INTO' [] []
 [2025-08-21T16:15:50.500343+00:00] php_mvc.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'csrf_name' in 'INSERT INTO' [] []
+[2025-08-21T21:44:19.846311+00:00] php_mvc.ERROR: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost' [] []
+[2025-08-21T21:44:20.888469+00:00] php_mvc.ERROR: SQLSTATE[HY000] [1698] Access denied for user 'root'@'localhost' [] []
