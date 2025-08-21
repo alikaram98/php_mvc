@@ -16,4 +16,6 @@ interface SessionInterface
     public function has(string $key): bool;
     public function forget(string $key): void;
     public function clear(): void;
+    public function flash(string $key, array $message): void;
+    public function getFlash(string $key): array;
 }

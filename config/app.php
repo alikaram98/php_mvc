@@ -45,9 +45,10 @@ return [
         ]
     ],
     'session'           => [
-        'name'     => $appName,
-        'sameSite' => 'strict',
-        'httponly' => true,
-        'secure'   => true
+        'name'       => $appName,
+        'sameSite'   => 'strict',
+        'httponly'   => true,
+        'secure'     => true,
+        'flash_name' => 'flash',
     ],
 ];

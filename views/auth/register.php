@@ -7,7 +7,7 @@
         <form class="login-form" id="registerForm" method="post" action="<?= $router->urlFor('register.store') ?>">
             <div class="form-group">
                 <div class="input-wrapper">
-                    <input type="name" <?= @$old['name'] ?> id="name" name="name" required autocomplete="name">
+                    <input type="name" value="<?= @$old['name'] ?>" id="name" name="name" required autocomplete="name">
                     <label for="name">Name</label>
                     <span class="focus-border"></span>
                 </div>
@@ -16,7 +16,7 @@
 
             <div class="form-group">
                 <div class="input-wrapper">
-                    <input type="email" <?= @$old['email'] ?> id="email" name="email" required autocomplete="email">
+                    <input type="email" value="<?= @$old['email'] ?>" id="email" name="email" required autocomplete="email">
                     <label for="email">Email Address</label>
                     <span class="focus-border"></span>
                 </div>

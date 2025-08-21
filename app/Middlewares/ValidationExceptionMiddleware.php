@@ -24,16 +24,16 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } catch (ValidationException $e) {
-            $data         = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
             $filterFields = ['password', 'confirm_password'];
 
             $data = array_diff_key($data, array_flip($filterFields));
 
-            $this->session->put('errors', $e->errors);
-            $this->session->put('old', $data);
+            $this->session->flash('errors', $e->errors);
+            $this->session->flash('old', $data);
 
-            $referer            = $request->getServerParams()['HTTP_REFERER'];
+            $referer = $request->getServerParams()['HTTP_REFERER'];
 
             return $this->responseFactory->createResponse(302)->withHeader('Location', $referer);
         }

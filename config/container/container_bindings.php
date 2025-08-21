@@ -58,6 +58,7 @@ return [
             $config->get('session.name'),
             $config->get('session.httponly'),
             $config->get('session.secure'),
+            $config->get('session.flash_name'),
             SameSite::tryFrom($config->get('session.sameSite'))
         )
     ),

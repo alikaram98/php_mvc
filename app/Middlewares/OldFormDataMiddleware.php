@@ -20,10 +20,8 @@ class OldFormDataMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($this->session->has('old')) {
-            $this->renderer->addAttribute('old', $this->session->get('old'));
-
-            $this->session->forget('old');
+        if ($old = $this->session->getFlash('old')) {
+            $this->renderer->addAttribute('old', $old);
         }
 
         return $handler->handle($request);
