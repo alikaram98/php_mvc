@@ -13,7 +13,15 @@ if (!function_exists('showError')) {
 }
 
 if (!function_exists('keyAuth')) {
-    function keyAuth(): string {
+    function keyAuth(): string
+    {
         return UserAuth::Key->value;
+    }
+}
+
+if (!function_exists('html')) {
+    function html($text): string
+    {
+        return htmlspecialchars($text ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 }

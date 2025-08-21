@@ -29,7 +29,7 @@
 <body>
     <header>
         <?php if ($auth->check()): ?>
-            <a href="#">Hi <?= $auth->user()->name ?></a>
+            <a href="#">Hi <?= html($auth->user()->name) ?></a>
             <a href="<?= $router->urlFor('dashboard') ?>">Dashboard</a>
         <?php else: ?>
             <a href="<?= $router->urlFor('login') ?>">login</a>
