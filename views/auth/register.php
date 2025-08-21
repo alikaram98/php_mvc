@@ -5,6 +5,7 @@
             <p>Sign up to your account</p>
         </div>
         <form class="login-form" id="registerForm" method="post" action="<?= $router->urlFor('register.store') ?>">
+            <?= $csrf['fields'] ?>
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="name" value="<?= @$old['name'] ?>" id="name" name="name" required autocomplete="name">

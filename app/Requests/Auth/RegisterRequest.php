@@ -38,7 +38,7 @@ class RegisterRequest implements RequestValidatorInterface
             throw new ValidationException($v->errors());
         }
 
-        $data = array_diff_key($data, array_flip(['confirm_password']));
+        $data = array_diff_key($data, array_flip(['confirm_password', 'csrf_name', 'csrf_value']));
 
         $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
 

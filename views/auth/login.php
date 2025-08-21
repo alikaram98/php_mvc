@@ -6,6 +6,7 @@
         </div>
 
         <form class="login-form" id="loginForm" method="post" action="<?= $router->urlFor('login.user') ?>">
+            <?= $csrf['fields'] ?>
             <div class="form-group">
                 <div class="input-wrapper">
                     <input type="email" value="<?= @$old['email'] ?>" id="email" name="email" required autocomplete="email">

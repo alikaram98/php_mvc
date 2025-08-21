@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Config;
 use App\Middlewares\AuthCheckViewMiddleware;
-use App\Middlewares\AuthMiddleware;
+use App\Middlewares\CsrfTokenMiddleware;
 use App\Middlewares\OldFormDataMiddleware;
 use App\Middlewares\RouteNameMiddleware;
 use App\Middlewares\StartSessionMiddleware;
@@ -17,6 +17,8 @@ return function (App $app): void {
 
     $config = $container->get(Config::class);
 
+    $app->add(CsrfTokenMiddleware::class);
+    $app->add('csrf');
     $app->add(AuthCheckViewMiddleware::class);
     $app->add(OldFormDataMiddleware::class);
     $app->add(RouteNameMiddleware::class);

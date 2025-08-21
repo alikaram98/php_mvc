@@ -24,6 +24,7 @@ use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
 use Slim\Views\PhpRenderer;
 use Slim\App;
@@ -32,7 +33,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use function DI\create;
 
 return [
-    App::class => function (ContainerInterface $container) {
+    App::class => function (ContainerInterface $container): App {
         $middleware = require CONFIG_PATH . '/middleware.php';
         $route      = require CONFIG_PATH . '/routes/web.php';
 
@@ -49,11 +50,12 @@ return [
     PhpRenderer::class                      => create(PhpRenderer::class)->constructor(VIEW_PATH),
     Config::class                           => create(Config::class)->constructor(require CONFIG_PATH . '/app.php'),
     MailerInterface::class                  => fn(Config $config): MailSymfonyService => new MailSymfonyService($config),
-    ResponseFactoryInterface::class         => fn(App $app) => $app->getResponseFactory(),
-    RouteNameInterface::class               => fn(ContainerInterface $container) => $container->get(RouteNamePhpRendererService::class),
-    RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(RequestFactory::class),
-    AuthInterface::class                    => fn(ContainerInterface $container) => $container->get(Auth::class),
-    SessionInterface::class                 => fn(Config $config) => new SessionService(
+    ResponseFactoryInterface::class         => fn(App $app): ResponseFactoryInterface => $app->getResponseFactory(),
+    RouteNameInterface::class               => fn(ContainerInterface $container): mixed => $container->get(RouteNamePhpRendererService::class),
+    RequestValidatorFactoryInterface::class => fn(ContainerInterface $container): mixed => $container->get(RequestFactory::class),
+    AuthInterface::class                    => fn(ContainerInterface $container): mixed => $container->get(Auth::class),
+    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory): Guard => new Guard($responseFactory, persistentTokenMode: true),
+    SessionInterface::class                 => fn(Config $config): SessionService => new SessionService(
         new SessionConfig(
             $config->get('session.name'),
             $config->get('session.httponly'),

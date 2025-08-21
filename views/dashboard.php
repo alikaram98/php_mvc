@@ -31,6 +31,7 @@
 <div class="wrapper">
    <h3>Dashboard page</h3> 
    <form method="POST" action="<?= $router->urlFor('logout') ?>">
+    <?= $csrf['fields'] ?>
     <button>Logout</button>
    </form>
 </div>
