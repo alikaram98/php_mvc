@@ -1,4 +1,7 @@
 {
+  "name": "alikaram98/php_mvc",
+  "description": "php_mvc package for your project",
+  "type": "project",
   "autoload": {
     "files": [
       "app/helper.php"
@@ -8,6 +11,7 @@
     }
   },
   "require": {
+    "php": ">=8.0",
     "slim/slim": "4.*",
     "slim/php-view": "^3.4",
     "vlucas/phpdotenv": "^5.6",
@@ -18,5 +22,6 @@
     "vlucas/valitron": "^1.4",
     "monolog/monolog": "^3.9",
     "slim/csrf": "^1.5"
-  }
+  },
+  "license": "MIT"
 }
