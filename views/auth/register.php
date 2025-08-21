@@ -44,7 +44,6 @@
                     </button>
                     <span class="focus-border"></span>
                 </div>
-                <span class="error-message" id="passwordError"></span>
             </div>
 
             <button type="submit" class="login-btn btn">

@@ -6,6 +6,7 @@ namespace App\Middlewares;
 
 use App\Contracts\SessionInterface;
 use App\Exceptions\ValidationException;
+use App\Services\RequestService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +17,8 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
-        private readonly SessionInterface $session
+        private readonly SessionInterface $session,
+        private readonly RequestService $requestService,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -33,7 +35,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             $this->session->flash('errors', $e->errors);
             $this->session->flash('old', $data);
 
-            $referer = $request->getServerParams()['HTTP_REFERER'];
+            $referer = $this->requestService->referer($request);
 
             return $this->responseFactory->createResponse(302)->withHeader('Location', $referer);
         }

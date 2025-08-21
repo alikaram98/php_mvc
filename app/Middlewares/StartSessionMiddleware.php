@@ -15,10 +15,15 @@ class StartSessionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly SessionInterface $session
-    ){}
+    ) {}
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->session->start();
+
+        if ($request->getMethod() === 'GET') {
+            $this->session->put('previousUrl', (string) $request->getUri());
+        }
 
         $response = $handler->handle($request);
 
