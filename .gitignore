@@ -1,1 +1,6 @@
 .env
+/storage/*.log
+/.vscode
+/.zed
+/node_modules
+/vendor

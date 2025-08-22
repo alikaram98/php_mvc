@@ -11,12 +11,14 @@ use App\Middlewares\StartSessionMiddleware;
 use App\Middlewares\ValidationErrorMiddleware;
 use App\Middlewares\ValidationExceptionMiddleware;
 use Slim\App;
+use Slim\Middleware\MethodOverrideMiddleware;
 
 return function (App $app): void {
     $container = $app->getContainer();
 
     $config = $container->get(Config::class);
 
+    $app->add(MethodOverrideMiddleware::class);
     $app->add(CsrfTokenMiddleware::class);
     $app->add('csrf');
     $app->add(AuthCheckViewMiddleware::class);
