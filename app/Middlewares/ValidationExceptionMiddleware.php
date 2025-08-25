@@ -7,6 +7,7 @@ namespace App\Middlewares;
 use App\Contracts\SessionInterface;
 use App\Exceptions\ValidationException;
 use App\Services\RequestService;
+use App\Services\ResponseFormatter;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,6 +20,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly SessionInterface $session,
         private readonly RequestService $requestService,
+        private readonly ResponseFormatter $responseFormatter,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -31,6 +33,15 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             $filterFields = ['password', 'confirm_password'];
 
             $data = array_diff_key($data, array_flip($filterFields));
+
+            if ($this->requestService->isXhr($request)) {
+                return $this
+                    ->responseFormatter
+                    ->asJson(
+                        $this->responseFactory->createResponse(422),
+                        ['old' => $data, 'errors' => $e->errors]
+                    );
+            }
 
             $this->session->flash('errors', $e->errors);
             $this->session->flash('old', $data);
