@@ -19,6 +19,8 @@ use App\Enums\SameSite;
 use App\Services\MailSymfonyService;
 use App\Services\RouteNamePhpRendererService;
 use App\Services\SessionService;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Filesystem;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
@@ -55,7 +57,7 @@ return [
     RouteNameInterface::class               => fn(ContainerInterface $container): mixed => $container->get(RouteNamePhpRendererService::class),
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container): mixed => $container->get(RequestFactory::class),
     AuthInterface::class                    => fn(ContainerInterface $container): mixed => $container->get(Auth::class),
-    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf): Guard => new Guard($responseFactory,failureHandler: $csrf->failureHandler(), persistentTokenMode: true),
+    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf): Guard => new Guard($responseFactory, failureHandler: $csrf->failureHandler(), persistentTokenMode: true),
     SessionInterface::class                 => fn(Config $config): SessionService => new SessionService(
         new SessionConfig(
             $config->get('session.name'),
@@ -69,4 +71,11 @@ return [
         => new Logger($config->get('app_name'))->pushHandler(
             new StreamHandler($config->get('log_directory'), Level::Warning)
         ),
+    Filesystem::class                       => function (Config $config): Filesystem {
+        $adapter = match ($config->get('uploade_drive')) {
+            'local' => new LocalFilesystemAdapter(STORAGE_PATH)
+        };
+
+        return new Filesystem($adapter);
+    },
 ];

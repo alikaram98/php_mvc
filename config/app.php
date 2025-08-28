@@ -20,6 +20,7 @@ return [
     'display_error'     => realBool($_ENV['APP_DEBUG']),
     'error_log'         => true,
     'error_log_details' => true,
+    'upload_drive'      => $_ENV['UPLOADER_DRIVER'],
     'mailer'            => [
         'driver'     => $_ENV['MAIL_DRIVER'],
         'username'   => $_ENV['MAIL_USERNAME'],
