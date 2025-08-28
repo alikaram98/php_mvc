@@ -11,6 +11,7 @@ use App\Contracts\{
 use App\Core\{
     Auth,
     Config,
+    Csrf,
     RequestFactory,
 };
 use App\DataObjects\SessionConfig;
@@ -54,7 +55,7 @@ return [
     RouteNameInterface::class               => fn(ContainerInterface $container): mixed => $container->get(RouteNamePhpRendererService::class),
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container): mixed => $container->get(RequestFactory::class),
     AuthInterface::class                    => fn(ContainerInterface $container): mixed => $container->get(Auth::class),
-    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory): Guard => new Guard($responseFactory, persistentTokenMode: true),
+    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf): Guard => new Guard($responseFactory,failureHandler: $csrf->failureHandler(), persistentTokenMode: true),
     SessionInterface::class                 => fn(Config $config): SessionService => new SessionService(
         new SessionConfig(
             $config->get('session.name'),
