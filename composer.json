@@ -21,7 +21,8 @@
     "symfony/console": "^7.3",
     "vlucas/valitron": "^1.4",
     "monolog/monolog": "^3.9",
-    "slim/csrf": "^1.5"
+    "slim/csrf": "^1.5",
+    "league/flysystem": "^3.0"
   },
   "license": "MIT"
 }
